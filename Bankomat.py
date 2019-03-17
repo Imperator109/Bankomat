@@ -43,7 +43,7 @@ def main():
                 min_wiersz, max_wiersz = 3 * (wiersz-1) + 1, 3 * wiersz + 1
                 for i in range(min_wiersz, max_wiersz):
                     przycisk = Button(text="%d"%i, width="6", height="3", background="silver", command=lambda j=i: self.Nacisnij(j))
-                    przycisk.place(x=150+(i-1)*70, y=150 + (wiersz-1)*70)
+                    przycisk.place(x=150+((i-1)%3)*70, y=150+(wiersz-1)*70)
                     self.pinpad.append(przycisk)
 
             #Przycisk 0
@@ -67,7 +67,6 @@ def main():
             self.przyciskbackspace = Button(text="<---", width="10", height="2", background="silver", command=self.cofnij)
             self.przyciskbackspace.place(x=350, y=430)
 
-
             self.oknoglowe.mainloop()
 
 
@@ -85,8 +84,6 @@ def main():
             self.Label2.configure(text=liczba * '*')
 
 
-
-
         ##############SPRAWDZANIE POPRAWNOŚCI PINU############################################
 
         def Zatwierdz(self):
@@ -100,7 +97,7 @@ def main():
                 self.Label2.configure(text=" ")
                 pin.clear()
                 liczba=0
-                while zmiennaiteracyjnapin==0:
+                if zmiennaiteracyjnapin <= 0:
                     try:
                         self.Zlypin()
                     except:
@@ -117,9 +114,6 @@ def main():
             self.Label10 = Label(text="Podałeś nieprawidłowy PIN trzy razy, koniec, nie ma kasy :-)", borderwidth="5", relief="raised", background="silver")
             self.Label10.config(font=("Arial", 22))
             self.Label10.place(x=180, y=20)
-
-
-
 
 
 
@@ -187,8 +181,6 @@ def main():
             self.Label4.place(x=80, y=30)
 
 
-
-
         def tak(self):
             self.tak.destroy()
             self.nie.destroy()
@@ -207,6 +199,8 @@ def main():
             self.Label3 = Label(text='', background="white", width=20)
             self.Label3.place(x=130, y=80)
             self.Label3.config(font=("Arial", 16))
+            
+            # Zmiane tej serii przyciskow pozostawiam jako cwiczenie
             
             # Przycisk 1
             self.przycisk1 = Button(text="1", width="6", height="3", background="silver", command=self.Na1)

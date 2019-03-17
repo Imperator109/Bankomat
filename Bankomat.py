@@ -24,9 +24,9 @@ def main():
             self.oknoglowe=Tk()
             self.oknoglowe.geometry("500x500")
             self.oknoglowe.title("Bankomat-interface")
+            self.pinpad = []  # tablica przyciskow do wprowadzenia PIN
 
-
-            #KOMUNKIAT
+            #KOMUNIKAT
             self.Label1=Label(text="Podaj pin: ", borderwidth="5", relief="raised", background="silver")
             self.Label1.config(font=("Arial", 22))
             self.Label1.place(x=180, y=20)
@@ -38,46 +38,16 @@ def main():
             self.Label2.place(x=130, y=80)
             self.Label2.config(font=("Arial", 16))
 
-
-            #Przycisk 1
-            self.przycisk1=Button(text="1", width="6", height="3", background="silver", command=self.Nacisnij1)
-            self.przycisk1.place(x=150, y= 150)
-
-
-            #Przycisk 2
-            self.przycisk2 = Button(text="2", width="6", height="3", background="silver", command=self.Nacisnij2)
-            self.przycisk2.place(x=220, y=150)
-
-            #Przycisk 3
-            self.przycisk3 = Button(text="3", width="6", height="3", background="silver", command=self.Nacisnij3)
-            self.przycisk3.place(x=290, y=150)
-
-            #Przycisk 4
-            self.przycisk4 = Button(text="4", width="6", height="3", background="silver", command=self.Nacisnij4)
-            self.przycisk4.place(x=150, y=220)
-
-            #Przycisk 5
-            self.przycisk5 = Button(text="5", width="6", height="3", background="silver", command=self.Nacisnij5)
-            self.przycisk5.place(x=220, y=220)
-
-            #Przycisk 6
-            self.przycisk6 = Button(text="6", width="6", height="3", background="silver", command=self.Nacisnij6)
-            self.przycisk6.place(x=290, y=220)
-
-            #Przycisk 7
-            self.przycisk7 = Button(text="7", width="6", height="3", background="silver", command=self.Nacisnij7)
-            self.przycisk7.place(x=150, y=290)
-
-            #Przycisk 8
-            self.przycisk8 = Button(text="8", width="6", height="3", background="silver", command=self.Nacisnij8)
-            self.przycisk8.place(x=220, y=290)
-
-            #Przycisk 9
-            self.przycisk9 = Button(text="9", width="6", height="3", background="silver", command=self.Nacisnij9)
-            self.przycisk9.place(x=290, y=290)
+            for wiersz in range(1, 4):
+                # Przyciski wiersza 'wiersz'
+                min_wiersz, max_wiersz = 3 * (wiersz-1) + 1, 3 * wiersz + 1
+                for i in range(min_wiersz, max_wiersz):
+                    przycisk = Button(text="%d"%i, width="6", height="3", background="silver", command=lambda j=i: self.Nacisnij(j))
+                    przycisk.place(x=150+((i-1)%3)*70, y=150+(wiersz-1)*70)
+                    self.pinpad.append(przycisk)
 
             #Przycisk 0
-            self.przycisk0 = Button(text="0", width="6", height="3", background="silver", command=self.Nacisnij0)
+            self.przycisk0 = Button(text="0", width="6", height="3", background="silver", command=lambda j=0: self.Nacisnij(j))
             self.przycisk0.place(x=150, y=360)
 
             #Przycisk *
@@ -97,73 +67,21 @@ def main():
             self.przyciskbackspace = Button(text="<---", width="10", height="2", background="silver", command=self.cofnij)
             self.przyciskbackspace.place(x=350, y=430)
 
-
             self.oknoglowe.mainloop()
 
 
 #Funkcje przycisków klawiatury - wpisywanie pinu
-        def Nacisnij1(self):
+        def Nacisnij(self, cyfra):
             nonlocal liczba
             liczba=liczba+1
-            pin.append(1)
+            pin.append(cyfra)
             self.Label2.configure(text=liczba*'*')
-
-
-        def Nacisnij2(self):
-            nonlocal liczba
-            liczba=liczba+1
-            pin.append(2)
-            self.Label2.configure(text=liczba * '*')
-
-        def Nacisnij3(self):
-            nonlocal liczba
-            liczba=liczba+1
-            pin.append(3)
-            self.Label2.configure(text=liczba * '*')
-
-        def Nacisnij4(self):
-            nonlocal liczba
-            liczba=liczba+1
-            pin.append(4)
-            self.Label2.configure(text=liczba * '*')
-
-        def Nacisnij5(self):
-            nonlocal liczba
-            liczba=liczba+1
-            pin.append(5)
-            self.Label2.configure(text=liczba * '*')
-
-        def Nacisnij6(self):
-            nonlocal liczba
-            liczba=liczba+1
-            pin.append(6)
-            self.Label2.configure(text=liczba * '*')
-
-        def Nacisnij7(self):
-            nonlocal liczba
-            liczba=liczba+1
-            pin.append(7)
-            self.Label2.configure(text=liczba * '*')
-
-        def Nacisnij8(self):
-            nonlocal liczba
-            liczba=liczba+1
-            pin.append(8)
-            self.Label2.configure(text=liczba * '*')
-
-        def Nacisnij9(self):
-            nonlocal liczba
-            liczba=liczba+1
-            pin.append(9)
-            self.Label2.configure(text=liczba * '*')
 
         def Nacisnij0(self):
             nonlocal liczba
             liczba=liczba+1
             pin.append(0)
             self.Label2.configure(text=liczba * '*')
-
-
 
 
         ##############SPRAWDZANIE POPRAWNOŚCI PINU############################################
@@ -179,7 +97,7 @@ def main():
                 self.Label2.configure(text=" ")
                 pin.clear()
                 liczba=0
-                while zmiennaiteracyjnapin==0:
+                if zmiennaiteracyjnapin <= 0:
                     try:
                         self.Zlypin()
                     except:
@@ -196,9 +114,6 @@ def main():
             self.Label10 = Label(text="Podałeś nieprawidłowy PIN trzy razy, koniec, nie ma kasy :-)", borderwidth="5", relief="raised", background="silver")
             self.Label10.config(font=("Arial", 22))
             self.Label10.place(x=180, y=20)
-
-
-
 
 
 
@@ -266,8 +181,6 @@ def main():
             self.Label4.place(x=80, y=30)
 
 
-
-
         def tak(self):
             self.tak.destroy()
             self.nie.destroy()
@@ -286,7 +199,9 @@ def main():
             self.Label3 = Label(text='', background="white", width=20)
             self.Label3.place(x=130, y=80)
             self.Label3.config(font=("Arial", 16))
-
+            
+            # Zmiane tej serii przyciskow pozostawiam jako cwiczenie
+            
             # Przycisk 1
             self.przycisk1 = Button(text="1", width="6", height="3", background="silver", command=self.Na1)
             self.przycisk1.place(x=150, y=150)
